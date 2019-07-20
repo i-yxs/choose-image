@@ -5,6 +5,7 @@ uniapp 媲美APP的流畅拖拽动画图像选择插件<br>
 使用方法：
 ---------------------------
 1、复制到pages目录下的choose-image文件夹到你的项目pages下
+<br>
 2、在pages.json中加入以下配置
 ```javascript
 {
