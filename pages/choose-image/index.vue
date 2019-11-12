@@ -232,7 +232,7 @@
             onPreviewImage(idx) {
                 if (!this.noPreviewImage) {
                     let urls = this.imageList.map(item => item.path);
-                    wx.previewImage({
+                    uni.previewImage({
                         current: idx,
                         urls: urls
                     })
@@ -241,7 +241,7 @@
             //选择图片
             onChooseImage() {
                 let count = this.maxCount - this.imageList.length;
-                wx.chooseImage({
+                uni.chooseImage({
                     count: count,
                     sizeType: ['compressed'],
                     success: (res) => {
