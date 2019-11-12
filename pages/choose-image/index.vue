@@ -74,7 +74,7 @@
             return {
                 imageList: [],
                 //最大选择数量
-                maxCount: 9,
+                maxCount: 99,
                 //是否可以滚动
                 hasScroll: true,
                 //当前是否正在进行拖拽排序操作
@@ -173,22 +173,25 @@
             },
             //获取元素的矩形盒子
             getRectBox(data) {
-                uni.createSelectorQuery().select(`.${data.class}`).boundingClientRect().exec(res => {
-                    if (res[0]) {
-                        data.tempRect = {
-                            top: res[0].top,
-                            left: res[0].left,
-                            width: res[0].width,
-                            height: res[0].height,
-                        };
-                        data.viewRect = Object.assign({}, data.tempRect);
-                    } else {
-                        //如果获取失败，延迟到下次 DOM 更新循环之后再次获取
-                        this.$nextTick(() => {
-                            this.getRectBox(data);
-                        })
-                    }
-                });
+				uni.createSelectorQuery().select(`.${data.class}`).boundingClientRect().exec(res => {
+				    if (res[0]) {
+						//获取当前滚动位置
+						this.getScrollTop().then(stop => {
+						    data.tempRect = {
+						        top: res[0].top+stop,
+						        left: res[0].left,
+						        width: res[0].width,
+						        height: res[0].height,
+						    };
+						    data.viewRect = Object.assign({}, data.tempRect);
+						})
+				    } else {
+				        //如果获取失败，延迟到下次 DOM 更新循环之后再次获取
+				        this.$nextTick(() => {
+				            this.getRectBox(data);
+				        })
+				    }
+				});
             },
             //获取滚动位置
             getScrollTop() {
@@ -229,7 +232,7 @@
             onPreviewImage(idx) {
                 if (!this.noPreviewImage) {
                     let urls = this.imageList.map(item => item.path);
-                    uni.previewImage({
+                    wx.previewImage({
                         current: idx,
                         urls: urls
                     })
@@ -238,7 +241,7 @@
             //选择图片
             onChooseImage() {
                 let count = this.maxCount - this.imageList.length;
-                uni.chooseImage({
+                wx.chooseImage({
                     count: count,
                     sizeType: ['compressed'],
                     success: (res) => {
